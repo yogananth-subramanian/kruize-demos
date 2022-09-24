@@ -1,0 +1,54 @@
+{
+    "experiment_name": "experiment_kafka",
+    "experiment_id": "a123",
+    "total_trials": 2,
+    "parallel_trials":1,
+    "objective_function": "aggregatedEndToEndLatency99pct",
+    "value_type": "double",
+    "hpo_algo_impl": "optuna_tpe",
+    "direction": "minimize",
+    "function_variables": [
+        {
+            "name": "aggregatedEndToEndLatency99pct",
+            "value_type": "double"
+        }
+    ],
+    "tunables": [
+        {
+            "name": "batch_size",
+            "value_type": "integer",
+            "upper_bound": 300000,
+            "lower_bound":  60000,
+            "step": 10000
+        },
+        {
+            "name": "linger_ms",
+            "value_type": "integer",
+            "upper_bound": 70,
+            "lower_bound": 10,
+            "step": 5
+        },
+        {
+            "name": "fetch_min_bytes",
+            "value_type": "integer",
+            "upper_bound":  60000,
+            "lower_bound":   8000,
+            "step": 10000
+        },
+        {
+            "name": "producersPerTopic",
+            "value_type": "integer",
+            "upper_bound": 40,
+            "lower_bound": 9,
+            "step": 9
+        },
+        {
+            "name": "consumerPerSubscription",
+            "value_type": "integer",
+            "upper_bound": 100,
+            "lower_bound":  9,
+            "step": 9
+        }
+
+    ]
+}
