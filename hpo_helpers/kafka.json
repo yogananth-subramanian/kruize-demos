@@ -1,0 +1,11 @@
+{
+  "messageSize": 1024,
+  "producersPerTopic": 125,
+  "consumerPerSubscription": 125,
+  "partitionsPerTopic": 125,
+  "linger_ms": 100,
+  "batch_size": 30000,
+  "fetch_min_bytes": 20000,
+  "testDurationMinutes": 15,
+  "throughput": 31457280
+}

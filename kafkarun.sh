@@ -1,8 +1,9 @@
 #!/bin/bash
 PY_CMD="python3"
 LOGFILE="${PWD}/hpo.log"
-ITERATIONS=3
+ITERATIONS=1
 SEARCHSPACE_JSON="hpo_helpers/kafka_search_space.json"
+KAFKA_CONFIG="hpo_helpers/kafka.json"
 URL="http://localhost:8085"
 exp_json=$(cat ${SEARCHSPACE_JSON})
 ename=$(${PY_CMD} -c "import hpo_helpers.utils; hpo_helpers.utils.getexperimentname(\"${SEARCHSPACE_JSON}\")")
@@ -37,7 +38,7 @@ do
   check_err "Error: Issue generating the configuration from HPO."
   echo ${HPO_CONFIG}
   echo "${HPO_CONFIG}" > hpo_config.json  
-  BENCHMARK_OUTPUT=$(./hpo_helpers/kafkarunbenchmark.sh "hpo_config.json" "${SEARCHSPACE_JSON}" "$i" "${ITERATIONS}")
+  BENCHMARK_OUTPUT=$(./hpo_helpers/kafkarunbenchmark.sh "hpo_config.json" "${SEARCHSPACE_JSON}" "$i" "${ITERATIONS}" "${KAFKA_CONFIG}")
   echo ${BENCHMARK_OUTPUT}
   obj_result=$(echo ${BENCHMARK_OUTPUT} | cut -d "=" -f2 | cut -d " " -f1)
   trial_state=$(echo ${BENCHMARK_OUTPUT} | cut -d "=" -f3 | cut -d " " -f1)
