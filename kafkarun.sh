@@ -1,9 +1,15 @@
 #!/bin/bash
 PY_CMD="python3"
+IP=$1
 LOGFILE="${PWD}/hpo.log"
-ITERATIONS=1
-SEARCHSPACE_JSON="hpo_helpers/kafka_search_space.json"
-KAFKA_CONFIG="hpo_helpers/kafka.json"
+ITERATIONS=$2
+#SEARCHSPACE_JSON="hpo_helpers/kafka_search_space.json"
+SEARCHSPACE_JSON=$3
+#KAFKA_CONFIG="hpo_helpers/kafka.json"
+KAFKA_CONFIG=$4
+[ -z ${5:-} ] && OBJFUNC_VARIABLES='aggregatedEndToEndLatency99pct'
+OBJFUNC_VARIABLES=${OBJFUNC_VARIABLES:=$5}
+
 URL="http://localhost:8085"
 exp_json=$(cat ${SEARCHSPACE_JSON})
 ename=$(${PY_CMD} -c "import hpo_helpers.utils; hpo_helpers.utils.getexperimentname(\"${SEARCHSPACE_JSON}\")")
@@ -38,7 +44,7 @@ do
   check_err "Error: Issue generating the configuration from HPO."
   echo ${HPO_CONFIG}
   echo "${HPO_CONFIG}" > hpo_config.json  
-  BENCHMARK_OUTPUT=$(./hpo_helpers/kafkarunbenchmark.sh "hpo_config.json" "${SEARCHSPACE_JSON}" "$i" "${ITERATIONS}" "${KAFKA_CONFIG}")
+  BENCHMARK_OUTPUT=$(./hpo_helpers/kafkarunbenchmark.sh "${IP}" "hpo_config.json" "${SEARCHSPACE_JSON}" "$i" "${ITERATIONS}" "${KAFKA_CONFIG}" "${OBJFUNC_VARIABLES}")
   echo ${BENCHMARK_OUTPUT}
   obj_result=$(echo ${BENCHMARK_OUTPUT} | cut -d "=" -f2 | cut -d " " -f1)
   trial_state=$(echo ${BENCHMARK_OUTPUT} | cut -d "=" -f3 | cut -d " " -f1)
